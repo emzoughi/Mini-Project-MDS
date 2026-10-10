@@ -63,7 +63,18 @@ Academic Year 2026--2027
 
 \subsection*{Q1.1 -- Kinematics}
 
+The CoreXY mechanism uses two motors to control the position of the print head in the $x$-$y$ plane. We assume that the belts are inextensible, that there is no slipping between the belts and pulleys, and that both driving pulleys have the same radius $r_m$.
 
+Let $\theta_l$ and $\theta_r$ denote the angular positions of the left and right motors respectively. The linear displacement of a belt driven by a pulley is given by $s=r_m\theta$.
+
+Due to the CoreXY belt arrangement, horizontal motion requires both motors to rotate in the same direction, whereas vertical motion requires them to rotate in opposite directions. Choosing consistent positive directions for the motor angles and Cartesian axes, the belt displacement constraints are
+
+\begin{equation}
+\begin{cases}
+r_m\Delta\theta_l = \Delta x + \Delta y,\\
+r_m\Delta\theta_r = \Delta x - \Delta y.
+\end{cases}
+\end{equation}
 
 
 

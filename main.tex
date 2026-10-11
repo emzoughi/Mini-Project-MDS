@@ -76,6 +76,61 @@ r_m\Delta\theta_r = \Delta x - \Delta y.
 \end{cases}
 \end{equation}
 
+Adding and subtracting these equations gives
+
+\begin{equation}
+\begin{cases}
+\displaystyle \Delta x = \frac{r_m}{2}
+(\Delta\theta_l+\Delta\theta_r),\\[6pt]
+\displaystyle \Delta y = \frac{r_m}{2}
+(\Delta\theta_l-\Delta\theta_r).
+\end{cases}
+\end{equation}
+
+Taking the origin of the Cartesian coordinate system as the reference position corresponding to $\theta_l=\theta_r=0$, the print head coordinates become
+
+\begin{equation}
+\boxed{
+\begin{aligned}
+x &= \frac{r_m}{2}(\theta_l+\theta_r),\\
+y &= \frac{r_m}{2}(\theta_l-\theta_r).
+\end{aligned}
+}
+\end{equation}
+
+Differentiating with respect to time yields the corresponding velocities
+
+\begin{equation}
+\boxed{
+\begin{aligned}
+\dot{x} &= \frac{r_m}{2}
+(\dot{\theta}_l+\dot{\theta}_r),\\
+\dot{y} &= \frac{r_m}{2}
+(\dot{\theta}_l-\dot{\theta}_r).
+\end{aligned}
+}
+\end{equation}
+
+These kinematic relations can also be written in matrix form
+
+\begin{equation}
+\begin{bmatrix}
+\dot{x}\\
+\dot{y}
+\end{bmatrix}
+=
+\frac{r_m}{2}
+\begin{bmatrix}
+1 & 1\\
+1 & -1
+\end{bmatrix}
+\begin{bmatrix}
+\dot{\theta}_l\\
+\dot{\theta}_r
+\end{bmatrix}.
+\end{equation}
+
+
 
 
 \end{document}

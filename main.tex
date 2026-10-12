@@ -157,6 +157,17 @@ the total kinetic energy of the two motor inertias and the print head is
   \label{eq:q12_kinetic}
 \end{align}
 
+\paragraph{Bearing friction.}
+We define the Rayleigh dissipation as $D=\frac12\sum_j\mu_j v_j^2$, where $v_j$ denotes the tangential speed of a rolling bearing relative to its axis, or the sliding speed of a linear bearing. The mechanism contains two stationary-axis upper bearings on each belt, four lower bearings whose axes travel with the horizontal gantry, two $x$-direction linear bearings and two $y$-direction linear bearings. We assume that bearings of a given type have the same coefficient.
+
+The two upper bearings on the left belt have tangential speeds of magnitude $|r_m\dot\theta_l|$, and the two on the right belt have $|r_m\dot\theta_r|$. For each lower bearing the tangential speed relative to its moving axis is $|\dot x|$, a purely vertical gantry translation does not make these bearings spin. Each linear bearing travels with speed $|\dot x|$ or $|\dot y|$ respectively. Consequently,
+\begin{equation}
+  D =
+  \mu_r r_m^2(\dot\theta_l^2+\dot\theta_r^2)
+  +(2\mu_r+\mu_{l,x})\dot x^2+\mu_{l,y}\dot y^2.
+  \label{eq:q12_dissipation}
+\end{equation}
+
 
 
 

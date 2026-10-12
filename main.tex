@@ -130,6 +130,33 @@ These kinematic relations can also be written in matrix form
 \end{bmatrix}.
 \end{equation}
 
+\subsection*{Q1.2 -- Dynamics}
+\label{sec:q12}
+
+\paragraph{Electrical dynamics.}
+For each motor $j\in\{l,r\}$, we chose to neglect the back electromotive force. Kirchhoff's voltage law and the electromechanical torque relation give
+\begin{equation}
+  u_{m,j}=L_m\dot i_{m,j}+R_m i_{m,j},
+  \qquad \tau_j=K_m i_{m,j}.
+  \label{eq:q12_electrical}
+\end{equation}
+
+\paragraph{Mechanical dynamics.}
+Using the kinematic relations derived in Q1.1,
+\begin{equation}
+  \dot x=\frac{r_m}{2}(\dot\theta_l+\dot\theta_r),\qquad
+  \dot y=\frac{r_m}{2}(\dot\theta_l-\dot\theta_r),
+  \label{eq:q12_kinematics}
+\end{equation}
+the total kinetic energy of the two motor inertias and the print head is
+\begin{align}
+  K &= \frac{J_m}{2}(\dot\theta_l^2+\dot\theta_r^2)
+       +\frac{m}{2}(\dot x^2+\dot y^2)\\
+    &=\frac{J_{\mathrm{eff}}}{2}(\dot\theta_l^2+\dot\theta_r^2),
+  \qquad J_{\mathrm{eff}}=J_m+\frac{m r_m^2}{2}.
+  \label{eq:q12_kinetic}
+\end{align}
+
 
 
 

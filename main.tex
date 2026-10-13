@@ -170,5 +170,56 @@ The two upper bearings on the left belt have tangential speeds of magnitude $|r_
 
 
 
+Applying the Euler--Lagrange equations with Rayleigh dissipation,
+\begin{equation}
+  \frac{d}{dt}\frac{\partial K}{\partial\dot\theta_j}
+  +\frac{\partial D}{\partial\dot\theta_j}
+  =K_m i_{m,j},\qquad j\in\{l,r\},
+\end{equation}
+we obtain
+\begin{equation}
+\begin{aligned}
+  J_{\mathrm{eff}}\ddot\theta_l+a\dot\theta_l+c\dot\theta_r&=K_m i_{m,l},\\
+  J_{\mathrm{eff}}\ddot\theta_r+c\dot\theta_l+a\dot\theta_r&=K_m i_{m,r},
+\end{aligned}
+\label{eq:q12_mechanics}
+\end{equation}
+where
+\begin{equation}
+  a=r_m^2\left(3\mu_r+\frac{\mu_{l,x}+\mu_{l,y}}{2}\right),\qquad
+  c=r_m^2\left(\mu_r+\frac{\mu_{l,x}-\mu_{l,y}}{2}\right).
+  \label{eq:q12_damping}
+\end{equation}
+
+\paragraph{State-space representation.}
+Let $\omega_l=\dot\theta_l$ and $\omega_r=\dot\theta_r$. We define
+\begin{equation}
+  \mathbf z=
+  \begin{bmatrix}\theta_l&\theta_r&\omega_l&\omega_r&i_{m,l}&i_{m,r}\end{bmatrix}^{\!\top},
+  \qquad
+  \mathbf u=\begin{bmatrix}u_{m,l}&u_{m,r}\end{bmatrix}^{\!\top}.
+\end{equation}
+Combining Eqs.~\eqref{eq:q12_electrical} and~\eqref{eq:q12_mechanics}, the requested state-space model is $\dot{\mathbf z}=A\mathbf z+B\mathbf u$, with
+\begin{equation}
+\label{eq:q12_state_space}
+\begin{aligned}
+A&=\begin{bmatrix}
+ 0&0&1&0&0&0\\
+ 0&0&0&1&0&0\\
+ 0&0&-a/J_{\mathrm{eff}}&-c/J_{\mathrm{eff}}&K_m/J_{\mathrm{eff}}&0\\
+ 0&0&-c/J_{\mathrm{eff}}&-a/J_{\mathrm{eff}}&0&K_m/J_{\mathrm{eff}}\\
+ 0&0&0&0&-R_m/L_m&0\\
+ 0&0&0&0&0&-R_m/L_m
+\end{bmatrix},\\[6pt]
+B&=\begin{bmatrix}
+ 0&0\\0&0\\0&0\\0&0\\1/L_m&0\\0&1/L_m
+\end{bmatrix}.
+\end{aligned}
+\end{equation}
+These equations define the continuous-time model used in the subsequent questions and in our Python implementation.
+
+
+
+
 
 \end{document}

@@ -219,6 +219,116 @@ B&=\begin{bmatrix}
 These equations define the continuous-time model used in the subsequent questions and in our Python implementation.
 
 
+\subsection*{Q1.3 -- Decoupling the $x$ and $y$ Dynamics}
+
+
+We introduce the following transformed currents and inputs:
+
+\begin{equation}
+\begin{aligned}
+i_x &= \frac{i_{m,l}+i_{m,r}}{2},
+& u_x &= \frac{u_{m,l}+u_{m,r}}{2},\\
+i_y &= \frac{i_{m,l}-i_{m,r}}{2},
+& u_y &= \frac{u_{m,l}-u_{m,r}}{2}.
+\end{aligned}
+\end{equation}
+
+\paragraph{Horizontal dynamics.}
+
+Adding the two mechanical equations obtained in Q1.2 gives
+
+\begin{equation}
+J_{\mathrm{eff}}(\ddot{\theta}_l+\ddot{\theta}_r)
++(a+c)(\dot{\theta}_l+\dot{\theta}_r)
+=K_m(i_{m,l}+i_{m,r}).
+\end{equation}
+
+Using the kinematic transformation and the definition of $i_x$, we obtain
+
+\begin{equation}
+J_{\mathrm{eff}}\ddot{x}
++(a+c)\dot{x}=r_mK_mi_x.
+\end{equation}
+
+Similarly, adding the electrical equations and dividing by two yields
+
+\begin{equation}
+L_m\dot{i}_x
+=u_x-R_mi_x.
+\end{equation}
+
+Choosing the state vector
+$\mathbf{x}_x=[x,\dot{x},i_x]^\top$, the horizontal state-space model becomes
+
+\begin{equation}
+\boxed{
+\dot{\mathbf{x}}_x=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & -\dfrac{a+c}{J_{\mathrm{eff}}}
+  & \dfrac{r_mK_m}{J_{\mathrm{eff}}}\\
+0 & 0 & -\dfrac{R_m}{L_m}
+\end{bmatrix}
+\mathbf{x}_x+
+\begin{bmatrix}
+0\\0\\\dfrac{1}{L_m}
+\end{bmatrix}u_x.
+}
+\end{equation}
+
+\paragraph{Vertical dynamics.}
+
+Subtracting the right motor equation from the left motor equation gives
+
+\begin{equation}
+J_{\mathrm{eff}}(\ddot{\theta}_l-\ddot{\theta}_r)
++(a-c)(\dot{\theta}_l-\dot{\theta}_r)
+=K_m(i_{m,l}-i_{m,r}).
+\end{equation}
+
+Using the definitions of $y$ and $i_y$, this becomes
+
+\begin{equation}
+J_{\mathrm{eff}}\ddot{y}
++(a-c)\dot{y}=r_mK_mi_y.
+\end{equation}
+
+The corresponding electrical equation is
+
+\begin{equation}
+L_m\dot{i}_y
+=u_y-R_mi_y.
+\end{equation}
+
+With $\mathbf{x}_y=[y,\dot{y},i_y]^\top$, the vertical state-space model is
+
+\begin{equation}
+\boxed{
+\dot{\mathbf{x}}_y=
+\begin{bmatrix}
+0 & 1 & 0\\
+0 & -\dfrac{a-c}{J_{\mathrm{eff}}}
+  & \dfrac{r_mK_m}{J_{\mathrm{eff}}}\\
+0 & 0 & -\dfrac{R_m}{L_m}
+\end{bmatrix}
+\mathbf{x}_y+
+\begin{bmatrix}
+0\\0\\\dfrac{1}{L_m}
+\end{bmatrix}u_y.
+}
+\end{equation}
+
+The damping coefficients, using the bearing-friction model of Q1.2, simplify to
+
+\begin{equation}
+a+c=r_m^2(4\mu_r+\mu_{l,x}),
+\qquad
+a-c=r_m^2(2\mu_r+\mu_{l,y}).
+\end{equation}
+
+The resulting state-space descriptions are independent, the horizontal dynamics depend only on $\mathbf{x}_x$ and $u_x$, while the vertical dynamics depend only on $\mathbf{x}_y$ and $u_y$. The original six-state system has therefore been transformed into two decoupled three-state systems.
+
+
 
 
 

@@ -329,6 +329,37 @@ a-c=r_m^2(2\mu_r+\mu_{l,y}).
 The resulting state-space descriptions are independent, the horizontal dynamics depend only on $\mathbf{x}_x$ and $u_x$, while the vertical dynamics depend only on $\mathbf{x}_y$ and $u_y$. The original six-state system has therefore been transformed into two decoupled three-state systems.
 
 
+\subsection*{Q1.4 -- Drawing shapes}
+
+To demonstrate the CoreXY model, we prescribe two closed planar trajectories: an ellipse and a cardioid. We determine the required voltages by inverse dynamics and then simulate the decoupled state-space models of Q1.3.
+
+\paragraph{Desired trajectories.}
+For the ellipse, we choose
+\begin{equation}
+ x_d(t)=A\cos(\omega t),\qquad
+ y_d(t)=B\sin(\omega t),\qquad \omega=\frac{2\pi}{T},
+\end{equation}
+where $A$ and $B$ are its semi-axes and $T$ is the traversal period. For the second shape, we chose to draw a cardioid.\footnote{E. W. Weisstein, ``Cardioid,'' \textit{Wolfram MathWorld} : \url{https://mathworld.wolfram.com/Cardioid.html}.}
+Its desired trajectory is
+\begin{equation}
+ r(t)=R\bigl(1-\cos(\omega t)\bigr),\qquad
+ x_d(t)=r(t)\cos(\omega t),\qquad
+ y_d(t)=r(t)\sin(\omega t).
+\end{equation}
+
+
+\paragraph{Input design by inverse dynamics.}
+From Q1.3, the dynamics are
+\begin{equation}
+\begin{aligned}
+J_{\mathrm{eff}}\ddot x+b_x\dot x&=r_mK_m i_x,
+& L_m\dot i_x&=u_x-R_m i_x,\\
+J_{\mathrm{eff}}\ddot y+b_y\dot y&=r_mK_m i_y,
+& L_m\dot i_y&=u_y-R_m i_y,
+\end{aligned}
+\end{equation}
+with $J_{\mathrm{eff}}=J_m+mr_m^2/2$, $b_x=a+c$, and $b_y=a-c$. Under the friction assumptions adopted in Q1.2, $b_x=r_m^2(4\mu_r+\mu_{l,x})$ and $b_y=r_m^2(2\mu_r+\mu_{l,y})$.
+
 
 
 

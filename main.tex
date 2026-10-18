@@ -359,6 +359,22 @@ J_{\mathrm{eff}}\ddot y+b_y\dot y&=r_mK_m i_y,
 \end{aligned}
 \end{equation}
 with $J_{\mathrm{eff}}=J_m+mr_m^2/2$, $b_x=a+c$, and $b_y=a-c$. Under the friction assumptions adopted in Q1.2, $b_x=r_m^2(4\mu_r+\mu_{l,x})$ and $b_y=r_m^2(2\mu_r+\mu_{l,y})$.
+For either coordinate $q\in\{x,y\}$, define $b_q=b_x$ or $b_y$ and the corresponding desired trajectory $q_d$. The required transformed current follows from the mechanical equation:
+\begin{equation}
+ i_{q,d}(t)=\frac{J_{\mathrm{eff}}\ddot q_d(t)+b_q\dot q_d(t)}{r_mK_m}.
+\end{equation}
+Substituting this current and its derivative into the electrical equation gives the transformed voltage input
+\begin{equation}
+\boxed{
+ u_q(t)=\frac{L_m\bigl(J_{\mathrm{eff}}q_d^{(3)}+b_q\ddot q_d\bigr)
+ +R_m\bigl(J_{\mathrm{eff}}\ddot q_d+b_q\dot q_d\bigr)}{r_mK_m}}.
+\end{equation}
+The voltages applied to the actual motors are obtained by inverting the transformation used in Q1.3:
+\begin{equation}
+\boxed{u_{m,l}(t)=u_x(t)+u_y(t),\qquad
+u_{m,r}(t)=u_x(t)-u_y(t).}
+\end{equation}
+
 
 
 

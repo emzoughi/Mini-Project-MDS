@@ -375,6 +375,43 @@ The voltages applied to the actual motors are obtained by inverting the transfor
 u_{m,r}(t)=u_x(t)-u_y(t).}
 \end{equation}
 
+\paragraph{Simulation and results.}
+We integrate both three-state systems using Python's \texttt{solve\_ivp} function and apply the motor voltages derived above. The initial position and velocity of each axis are chosen to coincide with the desired trajectory, the initial currents are set to $i_{x,d}(0)$ and $i_{y,d}(0)$. 
+
+For the numerical simulations in Q1.4, we used an AI assistant to help select reasonable parameter values for the system. These values are summarized in Table~\ref{tab:q14parameters} and were used to simulate both trajectories. 
+
+\begin{table}[htbp]
+\centering
+\caption{Parameter values used for the numerical simulations}
+\label{tab:q14parameters}
+\begin{tabular}{@{}ll@{}}
+\hline
+Mechanical & $r_m=0.01\,\mathrm{m}$, $m=0.06\,\mathrm{kg}$, $J_m=10^{-5}\,\mathrm{kg\,m^2}$\\
+Electrical & $K_m=0.07\,\mathrm{N\,m/A}$, $L_m=0.01\,\mathrm{H}$, $R_m=10\,\Omega$\\
+Friction & $(\mu_r,\mu_{l,x},\mu_{l,y})=(0.003,0.002,0.001)\,\mathrm{N\,s/m}$\\
+Ellipse & $A=0.04\,\mathrm{m}$, $B=0.025\,\mathrm{m}$\\
+Cardioid & $R=0.035\,\mathrm{m}$\\
+Both & $T=8\,\mathrm{s}$\\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.69\linewidth]{Q1_4_ellipse.png}
+\caption{Ellipse: prescribed and simulated print-head trajectories.}
+\label{fig:q14ellipse}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.69\linewidth]{Q1_4_cardioid.png}
+\caption{Cardioid: prescribed and simulated print-head trajectories.}
+\label{fig:q14cardioid}
+\end{figure}
+
 
 
 

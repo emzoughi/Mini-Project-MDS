@@ -412,6 +412,107 @@ Both & $T=8\,\mathrm{s}$\\
 \label{fig:q14cardioid}
 \end{figure}
 
+\subsection*{Q1.5 -- Model the Nozzle}
+
+
+
+We assume that the nozzle has a uniform temperature $T_n$ and that all electrical power dissipated by the heating resistor is converted into heat. The thermal losses to the environment and the filament are combined into a single equivalent thermal resistance $R_{t,n}$, with reference temperature $T_e$.
+
+\paragraph{Electrical model.}
+
+The electrical circuit consists of an inductor $L_n$ connected in series with a parallel resistor-capacitor circuit. We denote by $i_n$ the current through the inductor and by $v_n$ the voltage across the resistor $R_n$ and capacitor $C_n$.
+
+Applying Kirchhoff's voltage law gives
+
+\begin{equation}
+u_n = L_n\frac{di_n}{dt}+v_n.
+\end{equation}
+
+Therefore,
+
+\begin{equation}
+\frac{di_n}{dt}=\frac{u_n-v_n}{L_n}.
+\end{equation}
+
+Applying Kirchhoff's current law at the node connecting the three components yields
+
+\begin{equation}
+i_n=C_n\frac{dv_n}{dt}+\frac{v_n}{R_n}.
+\end{equation}
+
+Rearranging,
+
+\begin{equation}
+\frac{dv_n}{dt}
+=\frac{1}{C_n}\left(i_n-\frac{v_n}{R_n}\right).
+\end{equation}
+
+\paragraph{Thermal model.}
+
+The electrical power converted into heat by the resistor is given by Joule's law
+
+\begin{equation}
+P_{\mathrm{heat}}=\frac{v_n^2}{R_n}.
+\end{equation}
+
+The heat loss to the surroundings is modelled using the equivalent thermal resistance
+
+\begin{equation}
+P_{\mathrm{loss}}=\frac{T_n-T_e}{R_{t,n}}.
+\end{equation}
+
+Applying the energy balance to the nozzle gives
+
+\begin{equation}
+C_{t,n}\frac{dT_n}{dt}
+=P_{\mathrm{heat}}-P_{\mathrm{loss}}.
+\end{equation}
+
+Substituting the expressions for the heating power and the thermal losses,
+
+\begin{equation}
+\frac{dT_n}{dt}
+=\frac{1}{C_{t,n}}
+\left(
+\frac{v_n^2}{R_n}
+-\frac{T_n-T_e}{R_{t,n}}
+\right).
+\end{equation}
+
+\paragraph{State-space representation.}
+
+We choose the state vector
+
+\begin{equation}
+\mathbf{x}_n=
+\begin{bmatrix}
+T_n & i_n & v_n
+\end{bmatrix}^{\top},
+\end{equation}
+
+with the applied voltage $u_n$ as the system input.
+
+Combining the electrical and thermal equations, the complete state-space model becomes
+
+\begin{equation}
+\boxed{
+\dot{\mathbf{x}}_n=
+\begin{bmatrix}
+\displaystyle
+\frac{1}{C_{t,n}}
+\left(
+\frac{v_n^2}{R_n}
+-\frac{T_n-T_e}{R_{t,n}}
+\right)\\[12pt]
+\displaystyle
+\frac{u_n-v_n}{L_n}\\[10pt]
+\displaystyle
+\frac{1}{C_n}
+\left(i_n-\frac{v_n}{R_n}\right)
+\end{bmatrix}.
+}
+\end{equation}
+
 
 
 

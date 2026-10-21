@@ -514,6 +514,46 @@ Combining the electrical and thermal equations, the complete state-space model b
 \end{equation}
 
 
+\subsection*{Q1.6 -- Cooling of the Printed Filament}
+
+We model the first printed layer as a one-dimensional filament deposited along a closed elliptic path. The spatial coordinate $s$ denotes arc length along this path, and $T(s,t)$ denotes the local filament temperature. We assume uniform temperature across each cross-section, constant material properties, a square cross-section of side $w$, and constant temperatures of the nozzle, print bed and surrounding air. Heat conduction takes place along the filament, while heat is exchanged with the air and the heated print bed.
+
+\paragraph{Geometry and growing domain.}
+Let $L$ be the total perimeter of the ellipse. For a constant deposition speed $v$, the printed length and printing time are
+\begin{equation}
+    \ell(t)=\min(vt,L), \qquad t_p=\frac{L}{v},
+    \qquad \Omega(t)=[0,\ell(t)].
+\end{equation}
+
+
+\paragraph{Energy balance and governing PDE.}
+For a segment of length $ds$, the volume is $w^2ds$. Three faces of the square cross-section are exposed to air at temperature $T_e$, while its lower face is in contact with the heated bed at temperature $T_b$. Introducing heat-transfer coefficients $h_a$ and $h_b$, the losses (positive for heat leaving the filament) are
+\begin{equation}
+    dP_a=3h_aw(T-T_e)\,ds,
+    \qquad dP_b=h_bw(T-T_b)\,ds.
+\end{equation}
+Fourier's law gives the axial heat flow $q_s=-\kappa w^2\partial T/\partial s$, where $\kappa$ is the filament thermal conductivity. Conservation of energy yields
+\begin{equation}
+    \rho c_pw^2\frac{\partial T}{\partial t}
+    =\kappa w^2\frac{\partial^2T}{\partial s^2}
+    -3h_aw(T-T_e)-h_bw(T-T_b),
+\end{equation}
+where $\rho$ is the density and $c_p$ is the specific heat capacity. Dividing by $\rho c_pw^2$ gives the one-dimensional heat equation
+\begin{equation}
+\boxed{
+    \frac{\partial T}{\partial t}
+    =\alpha\frac{\partial^2T}{\partial s^2}
+    -\beta(T-T_{\mathrm{eq}}),
+}
+\label{eq:q16pde}
+\end{equation}
+with
+\begin{equation}
+    \alpha=\frac{\kappa}{\rho c_p},\qquad
+    \beta=\frac{3h_a+h_b}{\rho c_pw},\qquad
+    T_{\mathrm{eq}}=\frac{3h_aT_e+h_bT_b}{3h_a+h_b}.
+\end{equation}
+
 
 
 

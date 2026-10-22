@@ -563,6 +563,19 @@ During printing, we impose no axial heat flux at the original free end, and assi
     =\frac{\partial T}{\partial s}(L,t), \qquad t\ge t_p.
 \end{equation}
 
+\paragraph{Numerical method.}
+The full path is divided into $N$ cells of length $\Delta s=L/N$. For each deposited cell, the heat equation is integrated using explicit finite differences:
+\begin{equation}
+\boxed{
+T_i^{k+1}=T_i^k+\Delta t\left[
+\alpha\frac{T_{i+1}^k-2T_i^k+T_{i-1}^k}{\Delta s^2}
+-\beta(T_i^k-T_{\mathrm{eq}})
+\right].
+}
+\label{eq:q16discrete}
+\end{equation}
+During printing, a new cell is activated at $T_n$ as the nozzle progresses. No conduction is allowed into the unprinted region, which is equivalent to zero axial heat flux beyond the current end cell between depositions. After $t_p$, periodic neighbours are used to represent the closed loop.
+
 
 
 

@@ -554,6 +554,15 @@ with
     T_{\mathrm{eq}}=\frac{3h_aT_e+h_bT_b}{3h_a+h_b}.
 \end{equation}
 
+\paragraph{Deposition and boundary conditions.}
+
+During printing, we impose no axial heat flux at the original free end, and assign the freshly deposited material the temperature $T_n$ at the moving end. Once the nozzle completes the closed loop, the end points are physically connected, giving periodic boundary conditions:
+\begin{equation}
+    T(0,t)=T(L,t),\qquad
+    \frac{\partial T}{\partial s}(0,t)
+    =\frac{\partial T}{\partial s}(L,t), \qquad t\ge t_p.
+\end{equation}
+
 
 
 

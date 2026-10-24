@@ -29,3 +29,39 @@ T_eq = (3*h_air*T_air + h_bed*T_bed)/(3*h_air + h_bed)
 T = np.full(N, np.nan)
 times = []
 history = []
+
+j = 0
+while True:
+    t = j*dt
+    active = min(j + 1, N)
+    if j <N:
+        T[j] =T_nozzle
+    times.append(t)
+    history.append(T.copy())
+
+    #Stop when the printed filament has a nearly uniform temperature
+    if j >= N and T.max() - T.min() <= tol:
+        break
+    if j<N:
+        #Open filament, no heat flux at either end
+        segment = T[:active]
+        left = np.r_[segment[0], segment[:-1]]
+        right = np.r_[segment[1:], segment[-1]]
+        T[:active] +=dt*(alpha*(left - 2*segment + right)/ds**2 - beta*(segment - T_eq))
+    else:
+        # Closed filament, periodic neighbours
+        T += dt*(alpha*(np.roll(T, 1) - 2*T + np.roll(T, -1))/ds**2 - beta*(T - T_eq))
+    j += 1
+
+times = np.array(times)
+history = np.array(history)
+maximum = np.nanmax(history, axis=1)
+minimum = np.nanmin(history, axis=1)
+t_uniform = times[-1]
+
+print(f"Loop length: {L:.4f} m; printing speed: {L/t_print:.4f} m/s")
+print(f"Equilibrium temperature: {T_eq:.2f} deg C")
+print(f"Near-uniform time: {t_uniform:.2f} s")
+print(f"Time after deposition: {t_uniform-t_print:.2f} s")
+
+

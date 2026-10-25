@@ -64,4 +64,29 @@ print(f"Equilibrium temperature: {T_eq:.2f} deg C")
 print(f"Near-uniform time: {t_uniform:.2f} s")
 print(f"Time after deposition: {t_uniform-t_print:.2f} s")
 
+fig, ax = plt.subplots(figsize=(8, 4.8))
+early = times <= 65
+im = ax.pcolormesh(s*1000, times[early], history[early], shading='nearest',
+                   cmap='inferno', vmin=T_eq, vmax=T_nozzle)
+ax.plot([0, L*1000], [0, t_print], 'c--', label='Deposition front')
+ax.axhline(t_print, color='white', linestyle=':', label='Loop completed')
+ax.set(xlabel='Arc length along ellipse (mm)', ylabel='Time (s)',
+       title='Filament temperature during deposition and cooling')
+ax.legend()
+fig.colorbar(im, ax=ax, label='Filament temperature (°C)')
+fig.tight_layout()
+fig.savefig('Q1_6_temperature_map.png')
+
+fig, ax = plt.subplots(figsize=(8, 4.4))
+ax.plot(times, maximum, label='Maximum filament temperature')
+ax.plot(times, minimum, label='Minimum filament temperature')
+ax.axhline(T_eq, color='black', linestyle='--', label='Equilibrium temperature')
+ax.axvline(t_print, color='gray', linestyle=':', label='Deposition completed')
+ax.axvline(t_uniform, color='green', linestyle='--', label='Nearly uniform temperature')
+ax.set(xlabel='Time since first deposition (s)', ylabel='Temperature (°C)',
+       title='Cooling during and after deposition')
+ax.legend()
+fig.tight_layout()
+fig.savefig('Q1_6_cooling_curves.png')
+
 

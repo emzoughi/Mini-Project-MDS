@@ -577,6 +577,47 @@ T_i^{k+1}=T_i^k+\Delta t\left[
 During printing, a new cell is activated at $T_n$ as the nozzle progresses. No conduction is allowed into the unprinted region, which is equivalent to zero axial heat flux beyond the current end cell between depositions. After $t_p$, periodic neighbours are used to represent the closed loop.
 
 
+\paragraph{Parameters and results.}
+For the numerical illustration, reasonable material and heat-transfer parameters were selected with the assistance of an AI tool. The ellipse dimensions and deposition duration are consistent with the trajectory used in Q1.4.
+\begin{table}[htbp]
+\centering
+\caption{Parameters adopted for the Q1.6 simulation}
+\label{tab:q16params}
+\begin{tabular}{ll}
+\hline
+Ellipse semi-axes & $a_e=0.04\,\mathrm{m}$, $b_e=0.025\,\mathrm{m}$\\
+Filament side & $w=8\times10^{-4}\,\mathrm{m}$\\
+Density, heat capacity & $\rho=1250\,\mathrm{kg/m^3}$, $c_p=1800\,\mathrm{J/(kg\,K)}$\\
+Thermal conductivity & $\kappa=0.2\,\mathrm{W/(m\,K)}$\\
+Air, bed exchange & $h_a=10$, $h_b=60\,\mathrm{W/(m^2\,K)}$\\
+Nozzle, air, bed temperatures & $T_n=210^{\circ}\mathrm{C}$, $T_e=25^{\circ}\mathrm{C}$, $T_b=60^{\circ}\mathrm{C}$\\
+Print duration & $t_p=8\,\mathrm{s}$\\
+Discretization & $N=160$, $\Delta t=0.05\,\mathrm{s}$\\
+\hline
+\end{tabular}
+\end{table}
+
+The calculated ellipse perimeter is $L\approx 0.2069\,\mathrm{m}$ and the deposition speed is $v\approx0.0259\,\mathrm{m/s}$. The equilibrium temperature of the filament is $T_{\mathrm{eq}}\approx48.33^{\circ}\mathrm{C}$. Following the requirement that the printed layer becomes nearly uniform, we stop the simulation when the complete loop satisfies
+\begin{equation}
+    \max_i T_i-\min_i T_i\le 1^{\circ}\mathrm{C}.
+\end{equation}
+
+
+Figure~\ref{fig:q16map} shows how the temperature domain grows during the first $8\,\mathrm{s}$ and then cools along the completed loop. Figure~\ref{fig:q16cooling} shows the minimum and maximum temperatures. The temperature spread becomes smaller than $1^{\circ}\mathrm{C}$ at $t\approx85.25\,\mathrm{s}$ after printing starts, or $77.25\,\mathrm{s}$ after the first layer is completed.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.83\linewidth]{Q1_6_temperature_map.png}
+\caption{Temperature along the filament during progressive deposition and early cooling. The unprinted portion is left blank and the dashed line tracks the deposition front.}
+\label{fig:q16map}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.83\linewidth]{Q1_6_cooling_curves.png}
+\caption{Evolution of the minimum and maximum temperatures, showing deposition completion and the time at which the temperature becomes nearly uniform.}
+\label{fig:q16cooling}
+\end{figure}
 
 
 \end{document}

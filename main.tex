@@ -620,4 +620,65 @@ Figure~\ref{fig:q16map} shows how the temperature domain grows during the first 
 \end{figure}
 
 
+\subsection*{Q2.1 -- Finite State Machine for Filament Replacement}
+
+The filament replacement procedure is modelled using a Finite State Machine (FSM). Two independent discrete events can trigger the process: $C$, representing a colour change request, and $F$, indicating that the filament spool is empty.
+
+Since both events require the same replacement procedure, the transition from the printing state is triggered by $C \lor F$. At this transition, printing is stopped and the current print-head position $(x_s,y_s)$ is saved.
+
+The FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    >=Stealth,
+    state/.style={
+        draw,
+        rounded corners,
+        align=center,
+        minimum width=2.15cm,
+        minimum height=0.75cm,
+        font=\small
+    },
+    every edge/.style={draw,->}
+]
+
+\node[state] (P) at (0,0) {Printing};
+\node[state] (M) at (3.2,0) {Move to\\$(0,0)$};
+\node[state] (W) at (6.4,0) {Wiping};
+\node[state] (O) at (9.6,0) {Cooling\\(heater off)};
+
+\node[state] (L) at (9.6,-2.8) {Load filament};
+\node[state] (H) at (6.4,-2.8) {Heating\\(heater on)};
+\node[state] (R) at (3.2,-2.8) {Return to\\saved position};
+
+\draw[->] (P) -- node[above,align=center,font=\scriptsize]
+{$C\lor F$\\Stop and save position} (M);
+
+\draw[->] (M) -- node[above,font=\scriptsize]
+{At $(0,0)$} (W);
+
+\draw[->] (W) -- node[above,font=\scriptsize]
+{Wiping complete} (O);
+
+\draw[->] (O) -- node[right,font=\scriptsize]
+{Nozzle cool enough} (L);
+
+\draw[->] (L) -- node[below,font=\scriptsize]
+{Filament loaded} (H);
+
+\draw[->] (H) -- node[below,font=\scriptsize]
+{Nozzle ready} (R);
+
+\draw[->] (R.west) -- node[below left,font=\scriptsize]
+{Position reached} (P.south);
+
+\end{tikzpicture}
+\caption{Finite State Machine for the filament replacement procedure.}
+\label{fig:q21fsm}
+\end{figure}
+
+
+
+
 \end{document}

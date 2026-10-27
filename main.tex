@@ -29,10 +29,10 @@
 {\LARGE Delft University of Technology\par}
 \vspace{1.5cm}
 
-\includegraphics[width=0.35\textwidth]{tudelft_logo.png}
+\includegraphics[width=0.35\textwidth]{tudelftpng.png}
 \par\vspace{1.5cm}
 
-{\Large SC42155 -- Modeling Of Dynamic Systems\par}
+{\Large SC42155 -- Modeling of Dynamical Systems\par}
 \vspace{0.5cm}
 
 \vspace{1.5cm}
@@ -40,7 +40,7 @@
 \rule{\linewidth}{0.5mm}
 \par\vspace{0.5cm}
 
-{\LARGE Mini Project -- CoreXY Mechanism\par}
+{\LARGE Mini Project -- Modeling a 3D Printer\par}
 \vspace{0.5cm}
 
 \rule{\linewidth}{0.5mm}
@@ -48,7 +48,7 @@
 
 
 {\large
-Elyas Mzoughi (6798934) -- Group 38
+Elyas Mzoughi (6798934) - Group 38
 \par}
 
 \vfill
@@ -67,7 +67,7 @@ The CoreXY mechanism uses two motors to control the position of the print head i
 
 Let $\theta_l$ and $\theta_r$ denote the angular positions of the left and right motors respectively. The linear displacement of a belt driven by a pulley is given by $s=r_m\theta$.
 
-Due to the CoreXY belt arrangement, horizontal motion requires both motors to rotate in the same direction, whereas vertical motion requires them to rotate in opposite directions. Choosing consistent positive directions for the motor angles and Cartesian axes, the belt displacement constraints are
+Due to the belt arrangement, horizontal motion requires both motors to rotate in the same direction, whereas vertical motion requires them to rotate in opposite directions. Thus, the belt displacement constraints are
 
 \begin{equation}
 \begin{cases}
@@ -87,7 +87,7 @@ Adding and subtracting these equations gives
 \end{cases}
 \end{equation}
 
-Taking the origin of the Cartesian coordinate system as the reference position corresponding to $\theta_l=\theta_r=0$, the print head coordinates become
+Taking the origin of the coordinate system as the reference position corresponding to $\theta_l=\theta_r=0$, the print head coordinates become
 
 \begin{equation}
 \boxed{
@@ -98,7 +98,7 @@ y &= \frac{r_m}{2}(\theta_l-\theta_r).
 }
 \end{equation}
 
-Differentiating with respect to time yields the corresponding velocities
+Differentiating with respect to time gives the corresponding velocities
 
 \begin{equation}
 \boxed{
@@ -111,7 +111,7 @@ Differentiating with respect to time yields the corresponding velocities
 }
 \end{equation}
 
-These kinematic relations can also be written in matrix form
+In matrix form
 
 \begin{equation}
 \begin{bmatrix}
@@ -130,37 +130,35 @@ These kinematic relations can also be written in matrix form
 \end{bmatrix}.
 \end{equation}
 
+
 \subsection*{Q1.2 -- Dynamics}
 \label{sec:q12}
 
-\paragraph{Electrical dynamics.}
+\paragraph{Electrical dynamics}
 For each motor $j\in\{l,r\}$, we chose to neglect the back electromotive force. Kirchhoff's voltage law and the electromechanical torque relation give
 \begin{equation}
-  u_{m,j}=L_m\dot i_{m,j}+R_m i_{m,j},
+  u_{m,j}=L_m \frac{d}{dt} i_{m,j}+R_m i_{m,j},
   \qquad \tau_j=K_m i_{m,j}.
   \label{eq:q12_electrical}
 \end{equation}
 
-\paragraph{Mechanical dynamics.}
-Using the kinematic relations derived in Q1.1,
-\begin{equation}
-  \dot x=\frac{r_m}{2}(\dot\theta_l+\dot\theta_r),\qquad
-  \dot y=\frac{r_m}{2}(\dot\theta_l-\dot\theta_r),
-  \label{eq:q12_kinematics}
-\end{equation}
-the total kinetic energy of the two motor inertias and the print head is
+\paragraph{Mechanical dynamics}
+Using the relations derived in Q1.1, the total kinetic energy of the two motor inertias and the print head is
 \begin{align}
-  K &= \frac{J_m}{2}(\dot\theta_l^2+\dot\theta_r^2)
-       +\frac{m}{2}(\dot x^2+\dot y^2)\\
+  K &= K_{motors} + K_{head} \\
+  &= \frac{J_m}{2}(\dot\theta_l^2+\dot\theta_r^2)
+       +\frac{m}{2}(\dot x^2+\dot y^2)
+  \\ &=\frac{J_m}{2}(\dot\theta_l^2+\dot\theta_r^2) + \frac{m}{2}\frac{r_m^2}{2}(\dot\theta_l^2 + \dot \theta_r^2)\\
     &=\frac{J_{\mathrm{eff}}}{2}(\dot\theta_l^2+\dot\theta_r^2),
   \qquad J_{\mathrm{eff}}=J_m+\frac{m r_m^2}{2}.
   \label{eq:q12_kinetic}
 \end{align}
 
-\paragraph{Bearing friction.}
+
+\paragraph{Bearing friction}
 We define the Rayleigh dissipation as $D=\frac12\sum_j\mu_j v_j^2$, where $v_j$ denotes the tangential speed of a rolling bearing relative to its axis, or the sliding speed of a linear bearing. The mechanism contains two stationary-axis upper bearings on each belt, four lower bearings whose axes travel with the horizontal gantry, two $x$-direction linear bearings and two $y$-direction linear bearings. We assume that bearings of a given type have the same coefficient.
 
-The two upper bearings on the left belt have tangential speeds of magnitude $|r_m\dot\theta_l|$, and the two on the right belt have $|r_m\dot\theta_r|$. For each lower bearing the tangential speed relative to its moving axis is $|\dot x|$, a purely vertical gantry translation does not make these bearings spin. Each linear bearing travels with speed $|\dot x|$ or $|\dot y|$ respectively. Consequently,
+The two upper bearings on the left belt have tangential speeds of magnitude $|r_m\dot\theta_l|$, and the two on the right belt have $|r_m\dot\theta_r|$. For each lower bearing the tangential speed relative to its moving axis is $|\dot x|$, we assume that a purely vertical gantry translation does not make these bearings spin. Each linear bearing travels with speed $|\dot x|$ or $|\dot y|$ respectively. Consequently,
 \begin{equation}
   D =
   \mu_r r_m^2(\dot\theta_l^2+\dot\theta_r^2)
@@ -169,8 +167,7 @@ The two upper bearings on the left belt have tangential speeds of magnitude $|r_
 \end{equation}
 
 
-
-Applying the Euler--Lagrange equations with Rayleigh dissipation,
+Applying the Euler--Lagrange equations,
 \begin{equation}
   \frac{d}{dt}\frac{\partial K}{\partial\dot\theta_j}
   +\frac{\partial D}{\partial\dot\theta_j}
@@ -191,7 +188,7 @@ where
   \label{eq:q12_damping}
 \end{equation}
 
-\paragraph{State-space representation.}
+\paragraph{State-space representation}
 Let $\omega_l=\dot\theta_l$ and $\omega_r=\dot\theta_r$. We define
 \begin{equation}
   \mathbf z=
@@ -218,7 +215,6 @@ B&=\begin{bmatrix}
 \end{equation}
 These equations define the continuous-time model used in the subsequent questions and in our Python implementation.
 
-
 \subsection*{Q1.3 -- Decoupling the $x$ and $y$ Dynamics}
 
 
@@ -233,7 +229,7 @@ i_y &= \frac{i_{m,l}-i_{m,r}}{2},
 \end{aligned}
 \end{equation}
 
-\paragraph{Horizontal dynamics.}
+\paragraph{Horizontal dynamics}
 
 Adding the two mechanical equations obtained in Q1.2 gives
 
@@ -253,7 +249,7 @@ J_{\mathrm{eff}}\ddot{x}
 Similarly, adding the electrical equations and dividing by two yields
 
 \begin{equation}
-L_m\dot{i}_x
+L_m\frac{d}{dt}{i}_x
 =u_x-R_mi_x.
 \end{equation}
 
@@ -276,7 +272,7 @@ $\mathbf{x}_x=[x,\dot{x},i_x]^\top$, the horizontal state-space model becomes
 }
 \end{equation}
 
-\paragraph{Vertical dynamics.}
+\paragraph{Vertical dynamics}
 
 Subtracting the right motor equation from the left motor equation gives
 
@@ -296,7 +292,7 @@ J_{\mathrm{eff}}\ddot{y}
 The corresponding electrical equation is
 
 \begin{equation}
-L_m\dot{i}_y
+L_m\frac{d}{dt}{i}_y
 =u_y-R_mi_y.
 \end{equation}
 
@@ -318,7 +314,7 @@ With $\mathbf{x}_y=[y,\dot{y},i_y]^\top$, the vertical state-space model is
 }
 \end{equation}
 
-The damping coefficients, using the bearing-friction model of Q1.2, simplify to
+The damping coefficients, using the friction assumptions of Q1.2, simplify to
 
 \begin{equation}
 a+c=r_m^2(4\mu_r+\mu_{l,x}),
@@ -333,7 +329,7 @@ The resulting state-space descriptions are independent, the horizontal dynamics 
 
 To demonstrate the CoreXY model, we prescribe two closed planar trajectories: an ellipse and a cardioid. We determine the required voltages by inverse dynamics and then simulate the decoupled state-space models of Q1.3.
 
-\paragraph{Desired trajectories.}
+\paragraph{Desired trajectories}
 For the ellipse, we choose
 \begin{equation}
  x_d(t)=A\cos(\omega t),\qquad
@@ -348,18 +344,19 @@ Its desired trajectory is
 \end{equation}
 
 
-\paragraph{Input design by inverse dynamics.}
+\paragraph{Input design by inverse dynamics}
 From Q1.3, the dynamics are
 \begin{equation}
 \begin{aligned}
 J_{\mathrm{eff}}\ddot x+b_x\dot x&=r_mK_m i_x,
-& L_m\dot i_x&=u_x-R_m i_x,\\
+& L_m\frac{d}{dt} i_x&=u_x-R_m i_x,\\
 J_{\mathrm{eff}}\ddot y+b_y\dot y&=r_mK_m i_y,
-& L_m\dot i_y&=u_y-R_m i_y,
+& L_m\frac{d}{dt} i_y&=u_y-R_m i_y,
 \end{aligned}
 \end{equation}
-with $J_{\mathrm{eff}}=J_m+mr_m^2/2$, $b_x=a+c$, and $b_y=a-c$. Under the friction assumptions adopted in Q1.2, $b_x=r_m^2(4\mu_r+\mu_{l,x})$ and $b_y=r_m^2(2\mu_r+\mu_{l,y})$.
-For either coordinate $q\in\{x,y\}$, define $b_q=b_x$ or $b_y$ and the corresponding desired trajectory $q_d$. The required transformed current follows from the mechanical equation:
+with $b_x=a+c$, and $b_y=a-c$. 
+
+For either coordinate $q\in\{x,y\}$, we define $b_q=b_x$ or $b_y$ and the corresponding desired trajectory $q_d$. The required transformed current follows from the mechanical equation:
 \begin{equation}
  i_{q,d}(t)=\frac{J_{\mathrm{eff}}\ddot q_d(t)+b_q\dot q_d(t)}{r_mK_m}.
 \end{equation}
@@ -375,14 +372,14 @@ The voltages applied to the actual motors are obtained by inverting the transfor
 u_{m,r}(t)=u_x(t)-u_y(t).}
 \end{equation}
 
-\paragraph{Simulation and results.}
+\paragraph{Simulation and results}
 We integrate both three-state systems using Python's \texttt{solve\_ivp} function and apply the motor voltages derived above. The initial position and velocity of each axis are chosen to coincide with the desired trajectory, the initial currents are set to $i_{x,d}(0)$ and $i_{y,d}(0)$. 
 
-For the numerical simulations in Q1.4, we used an AI assistant to help select reasonable parameter values for the system. These values are summarized in Table~\ref{tab:q14parameters} and were used to simulate both trajectories. 
+The parameter values that we have selected for the simulation are summarized in Table~\ref{tab:q14parameters} and were used to simulate both trajectories. 
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
-\caption{Parameter values used for the numerical simulations}
+\caption{Parameters used for the simulation}
 \label{tab:q14parameters}
 \begin{tabular}{@{}ll@{}}
 \hline
@@ -412,13 +409,14 @@ Both & $T=8\,\mathrm{s}$\\
 \label{fig:q14cardioid}
 \end{figure}
 
+
 \subsection*{Q1.5 -- Model the Nozzle}
 
 
 
 We assume that the nozzle has a uniform temperature $T_n$ and that all electrical power dissipated by the heating resistor is converted into heat. The thermal losses to the environment and the filament are combined into a single equivalent thermal resistance $R_{t,n}$, with reference temperature $T_e$.
 
-\paragraph{Electrical model.}
+\paragraph{Electrical model}
 
 The electrical circuit consists of an inductor $L_n$ connected in series with a parallel resistor-capacitor circuit. We denote by $i_n$ the current through the inductor and by $v_n$ the voltage across the resistor $R_n$ and capacitor $C_n$.
 
@@ -434,7 +432,7 @@ Therefore,
 \frac{di_n}{dt}=\frac{u_n-v_n}{L_n}.
 \end{equation}
 
-Applying Kirchhoff's current law at the node connecting the three components yields
+Applying Kirchhoff's current law at the node connecting the three components gives
 
 \begin{equation}
 i_n=C_n\frac{dv_n}{dt}+\frac{v_n}{R_n}.
@@ -447,7 +445,7 @@ Rearranging,
 =\frac{1}{C_n}\left(i_n-\frac{v_n}{R_n}\right).
 \end{equation}
 
-\paragraph{Thermal model.}
+\paragraph{Thermal model}
 
 The electrical power converted into heat by the resistor is given by Joule's law
 
@@ -479,7 +477,7 @@ Substituting the expressions for the heating power and the thermal losses,
 \right).
 \end{equation}
 
-\paragraph{State-space representation.}
+\paragraph{State-space representation}
 
 We choose the state vector
 
@@ -518,7 +516,7 @@ Combining the electrical and thermal equations, the complete state-space model b
 
 We model the first printed layer as a one-dimensional filament deposited along a closed elliptic path. The spatial coordinate $s$ denotes arc length along this path, and $T(s,t)$ denotes the local filament temperature. We assume uniform temperature across each cross-section, constant material properties, a square cross-section of side $w$, and constant temperatures of the nozzle, print bed and surrounding air. Heat conduction takes place along the filament, while heat is exchanged with the air and the heated print bed.
 
-\paragraph{Geometry and growing domain.}
+\paragraph{Geometry and growing domain}
 Let $L$ be the total perimeter of the ellipse. For a constant deposition speed $v$, the printed length and printing time are
 \begin{equation}
     \ell(t)=\min(vt,L), \qquad t_p=\frac{L}{v},
@@ -526,19 +524,19 @@ Let $L$ be the total perimeter of the ellipse. For a constant deposition speed $
 \end{equation}
 
 
-\paragraph{Energy balance and governing PDE.}
+\paragraph{Energy balance and PDE}
 For a segment of length $ds$, the volume is $w^2ds$. Three faces of the square cross-section are exposed to air at temperature $T_e$, while its lower face is in contact with the heated bed at temperature $T_b$. Introducing heat-transfer coefficients $h_a$ and $h_b$, the losses (positive for heat leaving the filament) are
 \begin{equation}
     dP_a=3h_aw(T-T_e)\,ds,
     \qquad dP_b=h_bw(T-T_b)\,ds.
 \end{equation}
-Fourier's law gives the axial heat flow $q_s=-\kappa w^2\partial T/\partial s$, where $\kappa$ is the filament thermal conductivity. Conservation of energy yields
+Fourier's law gives the axial heat flow $q_s=-\kappa w^2\partial T/\partial s$, where $\kappa$ is the filament thermal conductivity. Conservation of energy gives
 \begin{equation}
     \rho c_pw^2\frac{\partial T}{\partial t}
     =\kappa w^2\frac{\partial^2T}{\partial s^2}
     -3h_aw(T-T_e)-h_bw(T-T_b),
 \end{equation}
-where $\rho$ is the density and $c_p$ is the specific heat capacity. Dividing by $\rho c_pw^2$ gives the one-dimensional heat equation
+where $\rho$ is the density and $c_p$ is the specific heat capacity. Dividing by $\rho c_pw^2$ gives us the one-dimensional heat equation
 \begin{equation}
 \boxed{
     \frac{\partial T}{\partial t}
@@ -554,7 +552,8 @@ with
     T_{\mathrm{eq}}=\frac{3h_aT_e+h_bT_b}{3h_a+h_b}.
 \end{equation}
 
-\paragraph{Deposition and boundary conditions.}
+
+\paragraph{Deposition and boundary conditions}
 
 During printing, we impose no axial heat flux at the original free end, and assign the freshly deposited material the temperature $T_n$ at the moving end. Once the nozzle completes the closed loop, the end points are physically connected, giving periodic boundary conditions:
 \begin{equation}
@@ -563,7 +562,7 @@ During printing, we impose no axial heat flux at the original free end, and assi
     =\frac{\partial T}{\partial s}(L,t), \qquad t\ge t_p.
 \end{equation}
 
-\paragraph{Numerical method.}
+\paragraph{Numerical method}
 The full path is divided into $N$ cells of length $\Delta s=L/N$. For each deposited cell, the heat equation is integrated using explicit finite differences:
 \begin{equation}
 \boxed{
@@ -575,13 +574,11 @@ T_i^{k+1}=T_i^k+\Delta t\left[
 \label{eq:q16discrete}
 \end{equation}
 During printing, a new cell is activated at $T_n$ as the nozzle progresses. No conduction is allowed into the unprinted region, which is equivalent to zero axial heat flux beyond the current end cell between depositions. After $t_p$, periodic neighbours are used to represent the closed loop.
-
-
-\paragraph{Parameters and results.}
-For the numerical illustration, reasonable material and heat-transfer parameters were selected with the assistance of an AI tool. The ellipse dimensions and deposition duration are consistent with the trajectory used in Q1.4.
-\begin{table}[htbp]
+\paragraph{Simulation and results}
+The material and heat-transfer parameter values that we have selected for the simulation are summarized in. The ellipse dimensions and deposition duration are consistent with the trajectory used in Q1.4.
+\begin{table}[H]
 \centering
-\caption{Parameters adopted for the Q1.6 simulation}
+\caption{Parameters used for the simulation}
 \label{tab:q16params}
 \begin{tabular}{ll}
 \hline
@@ -590,25 +587,27 @@ Filament side & $w=8\times10^{-4}\,\mathrm{m}$\\
 Density, heat capacity & $\rho=1250\,\mathrm{kg/m^3}$, $c_p=1800\,\mathrm{J/(kg\,K)}$\\
 Thermal conductivity & $\kappa=0.2\,\mathrm{W/(m\,K)}$\\
 Air, bed exchange & $h_a=10$, $h_b=60\,\mathrm{W/(m^2\,K)}$\\
-Nozzle, air, bed temperatures & $T_n=210^{\circ}\mathrm{C}$, $T_e=25^{\circ}\mathrm{C}$, $T_b=60^{\circ}\mathrm{C}$\\
+Nozzle, air, bed temperatures & $T_n=465\,\mathrm{K}$, $T_e=300\,\mathrm{K}$, $T_b=333.15\,\mathrm{K}$\\
 Print duration & $t_p=8\,\mathrm{s}$\\
 Discretization & $N=160$, $\Delta t=0.05\,\mathrm{s}$\\
 \hline
 \end{tabular}
 \end{table}
 
-The calculated ellipse perimeter is $L\approx 0.2069\,\mathrm{m}$ and the deposition speed is $v\approx0.0259\,\mathrm{m/s}$. The equilibrium temperature of the filament is $T_{\mathrm{eq}}\approx48.33^{\circ}\mathrm{C}$. Following the requirement that the printed layer becomes nearly uniform, we stop the simulation when the complete loop satisfies
+Our criteria for the requirement that the printed layer becomes nearly uniform is the following, we stop the simulation when the complete loop satisfies
 \begin{equation}
-    \max_i T_i-\min_i T_i\le 1^{\circ}\mathrm{C}.
+    \max_i T_i-\min_i T_i\le 1 K.
 \end{equation}
 
 
-Figure~\ref{fig:q16map} shows how the temperature domain grows during the first $8\,\mathrm{s}$ and then cools along the completed loop. Figure~\ref{fig:q16cooling} shows the minimum and maximum temperatures. The temperature spread becomes smaller than $1^{\circ}\mathrm{C}$ at $t\approx85.25\,\mathrm{s}$ after printing starts, or $77.25\,\mathrm{s}$ after the first layer is completed.
+Figure~\ref{fig:q16map} shows how the temperature domain grows during the first $8\,\mathrm{s}$ and then cools along the completed loop. Figure~\ref{fig:q16cooling} shows the minimum and maximum temperatures.
+The temperature spread becomes smaller than $1\,\mathrm{K}$ at $t\approx82.80\,\mathrm{s}$ after printing starts, or $74.80\,\mathrm{s}$ after the first layer is completed.
+
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.83\linewidth]{Q1_6_temperature_map.png}
-\caption{Temperature along the filament during progressive deposition and early cooling. The unprinted portion is left blank and the dashed line tracks the deposition front.}
+\caption{Temperature along the filament during progressive deposition and early cooling.}
 \label{fig:q16map}
 \end{figure}
 
@@ -622,13 +621,13 @@ Figure~\ref{fig:q16map} shows how the temperature domain grows during the first 
 
 \subsection*{Q2.1 -- Finite State Machine for Filament Replacement}
 
-The filament replacement procedure is modelled using a Finite State Machine (FSM). Two independent discrete events can trigger the process: $C$, representing a colour change request, and $F$, indicating that the filament spool is empty.
+The filament replacement procedure is modelled using a Finite State Machine. Two independent discrete events can trigger the process. $C$ representing a colour change request, and $F$ indicating that the filament spool is empty.
 
 Since both events require the same replacement procedure, the transition from the printing state is triggered by $C \lor F$. At this transition, printing is stopped and the current print-head position $(x_s,y_s)$ is saved.
 
-The FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
+Ours FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     >=Stealth,
@@ -677,6 +676,7 @@ The FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
 \caption{Finite State Machine for the filament replacement procedure.}
 \label{fig:q21fsm}
 \end{figure}
+
 
 \subsection*{Q2.2 -- Automata: Parked Detection}
 
@@ -747,9 +747,3 @@ produces the state sequence
 \begin{equation}
 q_0\to q_0\to q_0\to q_0\to q_H\to q_H\to q_P.
 \end{equation}
-
-
-
-
-
-\end{document}

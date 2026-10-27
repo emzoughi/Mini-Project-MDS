@@ -678,6 +678,77 @@ The FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
 \label{fig:q21fsm}
 \end{figure}
 
+\subsection*{Q2.2 -- Automata: Parked Detection}
+
+The print head is parked at the origin when it has reached both the left
+boundary ($x=0$) and the bottom boundary ($y=0$). As no end-of-line sensors
+are available, these boundaries are detected using the commanded motion and
+the motor angular-velocity measurements. The input $(H,0)$ indicates that a
+horizontal command towards the left boundary produces no motion, whereas
+$(V,0)$ indicates the same for a vertical command towards the bottom boundary.
+The symbol $+$ denotes detected motion. We assume that the corresponding
+voltage command is applied and that the absence of motion indicates contact
+with the respective boundary.
+
+We define a deterministic finite automaton
+\begin{equation}
+\mathcal M=(Q,\Sigma,\delta,Q_0,F),
+\end{equation}
+where
+\begin{equation}
+\begin{aligned}
+Q&=\{q_0,q_H,q_V,q_P\},\\
+\Sigma&=\{(H,+),(H,0),(V,+),(V,0)\},\\
+Q_0&=\{q_0\},\qquad F=\{q_P\}.
+\end{aligned}
+\end{equation}
+The initial state $q_0$ means that neither boundary has been detected.
+State $q_H$ indicates that the left boundary has been reached, while
+$q_V$ indicates that the bottom boundary has been reached. The accepting
+state $q_P$ represents the head being parked at $(0,0)$.
+
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  >=Stealth,
+  node distance=2cm,
+  state/.style={draw,circle,minimum size=10mm,inner sep=1pt},
+  every edge/.style={draw,->,thick},
+  lab/.style={font=\scriptsize,fill=white,inner sep=1pt}
+]
+\node[state] (q0) at (0,0) {$q_0$};
+\node[state] (qH) at (3.2,1.8) {$q_H$};
+\node[state] (qV) at (3.2,-1.8) {$q_V$};
+\node[state,double,double distance=1.7pt] (qP) at (6.6,0) {$q_P$};
+\draw[->,thick] (-1.1,0) -- (q0);
+\path
+(q0) edge node[lab,above left] {$(H,0)$} (qH)
+     edge node[lab,below left] {$(V,0)$} (qV)
+(qH) edge node[lab,above right] {$(V,0)$} (qP)
+(qV) edge node[lab,below right] {$(H,0)$} (qP);
+\path
+(q0) edge[loop left] node[lab,left,align=center] {$(H,+)$\\$(V,+)$} (q0)
+(qH) edge[loop above] node[lab,above,align=center] {$(H,+),\ (V,+)$\\$(H,0)$} (qH)
+(qV) edge[loop below] node[lab,below,align=center] {$(H,+),\ (V,+)$\\$(V,0)$} (qV)
+(qP) edge[loop right] node[lab,right] {all inputs} (qP);
+\end{tikzpicture}
+\caption{Deterministic finite automaton for detecting the parked print head.}
+\label{fig:q22automaton}
+\end{figure}
+
+The automaton accepts a sequence once it has observed both $(H,0)$ and
+$(V,0)$, in either order. In particular, the example sequence from the
+project statement,
+\begin{equation}
+\sigma=(H,+)(V,+)(H,+)(H,0)(V,+)(V,0),
+\end{equation}
+produces the state sequence
+\begin{equation}
+q_0\to q_0\to q_0\to q_0\to q_H\to q_H\to q_P.
+\end{equation}
+
+
 
 
 

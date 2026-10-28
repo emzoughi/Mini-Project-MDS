@@ -829,3 +829,38 @@ Taking the positive root gives
 \begin{equation}
 \boxed{u_{\mathrm{hold}}=\sqrt{\frac{R_n(T_{\mathrm{ready}}-T_e)}{R_{t,n}}}.}
 \end{equation}
+
+\paragraph{Guards, invariants and reset maps}
+The discrete modes change when the corresponding guards are satisfied. We use the elapsed time $\tau=t-t_0$, with $\dot\tau=1$ and $\tau^+=0$ at each new operation. Position and speed tolerances $\varepsilon_p$ and $\varepsilon_v$ define the motion guards:
+\begin{equation}
+\begin{aligned}
+G_V&:\ \tau\geq D\ \land\ |y|\leq\varepsilon_p\ \land\ |\dot y|\leq\varepsilon_v,\\
+G_H&:\ \tau\geq D\ \land\ |x|\leq\varepsilon_p\ \land\ |\dot x|\leq\varepsilon_v,\\
+G_R&:\ \tau\geq D\ \land\
+\sqrt{(x-x_s)^2+(y-y_s)^2}\leq\varepsilon_p\ \land\
+\sqrt{\dot x^2+\dot y^2}\leq\varepsilon_v.
+\end{aligned}
+\end{equation}
+Here the positions and velocities are reconstructed from the motor states using Q1.1. The simulation represents arrival at the boundaries through planned movements, rather than modelling the physical motor stalls considered in Q2.2.
+
+Table~\ref{tab:q31hybrid} gives the transitions, guards, invariants and resets. The physical states remain continuous, $\mathbf z^+=\mathbf z^-$, while the saved position, time reference and movement targets are updated when required. The nozzle voltage is determined by the active mode, not by resetting its physical state.
+
+\begin{table}[H]
+\centering\small
+\caption{Mode transitions, invariants and reset maps for filament replacement}
+\label{tab:q31hybrid}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.05cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.15cm}>{\raggedright\arraybackslash}p{3.1cm}}
+\hline
+Mode / next mode & Guard & Mode invariant & Reset at transition \\
+\hline
+Printing $\to$ Move$_V$ & $C\lor F$ & $X$ & Save $(x_s,y_s)=(x,y)$; $\tau^+=0$ \\
+Move$_V\to$ Move$_H$ & $G_V$ & $X$ & Set horizontal target; $\tau^+=0$ \\
+Move$_H\to$ Wiping & $G_H$ & $X$ & $\tau^+=0$ \\
+Wiping $\to$ Cooling & $\tau\geq t_w$ & $\tau\leq t_w$ & $\tau^+=0$ \\
+Cooling $\to$ Loading & $T_n\leq T_{\mathrm{safe}}$ & $T_n\geq T_{\mathrm{safe}}$ & $\tau^+=0$ \\
+Loading $\to$ Heating & $\tau\geq t_L$ & $\tau\leq t_L$ & $\tau^+=0$ \\
+Heating $\to$ Return & $T_n\geq T_{\mathrm{ready}}$ & $T_n\leq T_{\mathrm{ready}}$ & Set saved-position target; $\tau^+=0$ \\
+Return $\to$ Printing & $G_R$ & $X$ & Set printing target; $\tau^+=0$ \\
+\hline
+\end{tabular}
+\end{table}

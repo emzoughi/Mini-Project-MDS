@@ -747,3 +747,85 @@ produces the state sequence
 \begin{equation}
 q_0\to q_0\to q_0\to q_0\to q_H\to q_H\to q_P.
 \end{equation}
+
+
+\subsection*{Q3.1 -- Filament Replacement}
+
+\paragraph{Hybrid system model}
+We combine the motor dynamics from Q1.2, the nozzle model from Q1.5 and the filament-replacement FSM from Q2.1 into a hybrid system. We define
+\begin{equation}
+H=(Q,X,f,\mathrm{Init},\mathrm{Inv},E,G,R),
+\end{equation}
+where $Q$ is the set of discrete modes, $X$ the continuous state space, $f$ the continuous dynamics, $\mathrm{Init}$ the initial states, $\mathrm{Inv}$ the invariants, $E$ the transitions, $G$ the guards and $R$ the reset relations.
+
+The physical state and input vectors are
+\begin{equation}
+\mathbf z=\begin{bmatrix}
+\theta_l&\theta_r&\omega_l&\omega_r&i_{m,l}&i_{m,r}&T_n&i_n&v_n
+\end{bmatrix}^{\top},\qquad
+\mathbf u=\begin{bmatrix}u_{m,l}&u_{m,r}&u_n\end{bmatrix}^{\top}.
+\end{equation}
+The nine equations from Q1.2 and Q1.5 are combined into $\dot{\mathbf z}=f(\mathbf z,\mathbf u)$. The simulation also stores the position at which printing is interrupted and the starting time of each operation.
+
+\paragraph{Discrete modes}
+The replacement procedure is represented by
+\[
+Q=\{\mathrm{Printing,Move}_V,\mathrm{Move}_H,
+\mathrm{Wiping,Cooling,Loading,Heating,Return}\}.
+\]
+The initial mode is Printing. When a colour-change request $C$ or an empty-spool event $F$ occurs, printing stops and the current position $(x_s,y_s)$ is saved. The head first moves vertically to $(x_s,0)$ and then horizontally to the wiping location $(0,0)$. After wiping, the nozzle heater is switched off, the new filament is loaded and the nozzle is reheated. Finally, the head returns to $(x_s,y_s)$ and printing resumes. The two movement modes distinguish the vertical and horizontal parking phases.
+
+\paragraph{Motor and nozzle inputs}
+To simulate these movements, we must determine the motor voltages rather than directly impose the print-head position. We therefore reuse the inverse dynamics of Q1.4, which gives the required voltages once a desired trajectory is specified.
+
+For either Cartesian coordinate $\xi\in\{x,y\}$, consider a movement from $\xi_a$ to $\xi_b$ in a duration $D$. We introduce the normalized time
+\begin{equation}
+s=\frac{t-t_0}{D},\qquad 0\leq s\leq1,
+\end{equation}
+where $t_0$ is the starting time, and write the trajectory as
+\begin{equation}
+\xi_d(t)=\xi_a+(\xi_b-\xi_a)p(s).
+\end{equation}
+To start and finish each movement at rest, with zero acceleration and hence zero desired motor current, we impose
+\begin{equation}
+\begin{aligned}
+p(0)&=0, & p(1)&=1,\\
+p'(0)&=0, & p'(1)&=0,\\
+p''(0)&=0, & p''(1)&=0.
+\end{aligned}
+\end{equation}
+We choose a fifth-degree interpolation polynomial\footnote{The use of a polynomial trajectory interpolation was suggested with the assistance of an AI tool}, which has six coefficients to satisfy these six conditions:
+\begin{equation}
+p(s)=a_0+a_1s+a_2s^2+a_3s^3+a_4s^4+a_5s^5.
+\end{equation}
+The conditions at $s=0$ give $a_0=a_1=a_2=0$, while those at $s=1$ give
+\begin{equation}
+\begin{cases}
+a_3+a_4+a_5=1,\\
+3a_3+4a_4+5a_5=0,\\
+6a_3+12a_4+20a_5=0.
+\end{cases}
+\end{equation}
+Solving yields $a_3=10$, $a_4=-15$ and $a_5=6$. Thus,
+\begin{equation}
+\boxed{\xi_d(t)=\xi_a+(\xi_b-\xi_a)(10s^3-15s^4+6s^5).}
+\end{equation}
+This choice makes it possible to stop the head between movements. Its velocity, acceleration and third derivative are used in the inverse dynamics:
+\begin{equation}
+\begin{aligned}
+i_{\xi,d}&=\frac{J_{\mathrm{eff}}\ddot\xi_d+b_\xi\dot\xi_d}{r_mK_m},
+&u_\xi&=L_m\frac{d}{dt}i_{\xi,d}+R_mi_{\xi,d},\\
+u_{m,l}&=u_x+u_y,
+&u_{m,r}&=u_x-u_y,
+\end{aligned}
+\end{equation}
+For the simulation, we chose that ach parking and return movement lasts $D=1\,\mathrm{s}$, the initial printing movement covers $12\,\mathrm{mm}$ in $1.5\,\mathrm{s}$. Outside planned movements, the motor voltages are zero.
+
+For the nozzle, $u_n=0$ during Cooling and Loading, and $u_n=u_{\mathrm{heat}}$ during Heating. In the remaining modes, a constant holding voltage maintains the nominal printing temperature. From the nozzle equations of Q1.5, the steady-state conditions $\dot T_n=\frac{d}{dt} i_n=\dot v_n=0$ give $v_n=u_n$ and
+\begin{equation}
+\frac{u_n^2}{R_n}=\frac{T_{\mathrm{ready}}-T_e}{R_{t,n}}.
+\end{equation}
+Taking the positive root gives
+\begin{equation}
+\boxed{u_{\mathrm{hold}}=\sqrt{\frac{R_n(T_{\mathrm{ready}}-T_e)}{R_{t,n}}}.}
+\end{equation}

@@ -864,3 +864,89 @@ Return $\to$ Printing & $G_R$ & $X$ & Set printing target; $\tau^+=0$ \\
 \hline
 \end{tabular}
 \end{table}
+
+\paragraph{Numerical simulation and results}
+We use the same mechanical and electrical parameters as in Q1.4. The additional parameter values selected for the nozzle and the filament replacement simulation are summarized in Table~\ref{tab:q31params}.
+
+\begin{table}[H]
+\centering
+\caption{Parameters used for the simulation}
+\label{tab:q31params}
+\begin{tabular}{lll}
+\hline
+Parameter & Symbol & Value \\
+\hline
+Nozzle inductance & $L_n$ & $0.010\,\mathrm{H}$ \\
+Nozzle capacitance & $C_n$ & $0.002\,\mathrm{F}$ \\
+Electrical resistance & $R_n$ & $8\,\Omega$ \\
+Thermal capacitance & $C_{t,n}$ & $0.6\,\mathrm{J/K}$ \\
+Thermal resistance & $R_{t,n}$ & $9\,\mathrm{K/W}$ \\
+Ambient temperature & $T_e$ & $300\,\mathrm{K}$ \\
+Safe temperature & $T_{\mathrm{safe}}$ & $335\,\mathrm{K}$ \\
+Printing temperature & $T_{\mathrm{ready}}$ & $465\,\mathrm{K}$ \\
+Heating voltage & $u_{\mathrm{heat}}$ & $18\,\mathrm{V}$ \\
+Position tolerance & $\varepsilon_p$ & $0.5\,\mathrm{mm}$ \\
+Velocity tolerance & $\varepsilon_v$ & $0.003\,\mathrm{m/s}$ \\
+Wiping duration & $t_w$ & $0.7\,\mathrm{s}$ \\
+Loading duration & $t_L$ & $0.7\,\mathrm{s}$ \\
+Replacement request time & $t_{\mathrm{request}}$ & $1.5\,\mathrm{s}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+A replacement request at $t_{\mathrm{request}}$, representing either event $C$ or $F$, initiates the filament replacement procedure.
+
+The continuous dynamics are implemented in \texttt{sys(t,z)} and integrated with Python's \texttt{solve\_ivp}, following the approach presented in Chapter 6. For each mode, an event function describes the active guard. For example, $T_n-T_{\mathrm{safe}}=0$ triggers the transition from Cooling to Loading. The solver stops when an event is detected, the discrete mode and auxiliary variables are updated, and integration resumes with the new inputs.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\linewidth]{Q3_1_motion.png}
+\caption{Print-head motion during filament replacement, showing parking at the origin and return to the saved position.}
+\label{fig:q31motion}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.83\linewidth]{Q3_1_temperature.png}
+\caption{Nozzle temperature during cooling, loading and reheating.}
+\label{fig:q31temperature}
+\end{figure}
+
+The head reaches the origin at $3.50\,\mathrm{s}$ and wiping ends at $4.20\,\mathrm{s}$. The nozzle reaches the safe loading temperature at $12.58\,\mathrm{s}$ and the printing temperature at $16.05\,\mathrm{s}$. Printing resumes at approximately $17.05\,\mathrm{s}$.
+
+\subsection*{Q3.2 -- Draw a Square}
+
+\paragraph{Hybrid system extension}
+We extend the hybrid model of Q3.1 with four successive drawing modes. The physical dynamics remain unchanged and the nozzle is maintained at its printing temperature using $u_{\mathrm{hold}}$. Each mode prescribes one side of the square, and transitions are determined from the motor-angle measurements.
+
+\paragraph{Square trajectory and motor angles}
+Let $(x_0,y_0)$ denote the initial print-head position and $d$ the side length. The target corners are
+\begin{equation}
+\begin{aligned}
+P_1&=(x_0+d,y_0), &P_2&=(x_0+d,y_0+d),\\
+P_3&=(x_0,y_0+d), &P_4&=(x_0,y_0).
+\end{aligned}
+\end{equation}
+Using the kinematics from Q1.1, the motor angles corresponding to a target $(x_d,y_d)$ are
+\begin{equation}
+\theta_{l,d}=\frac{x_d+y_d}{r_m},\qquad
+\theta_{r,d}=\frac{x_d-y_d}{r_m}.
+\label{eq:q32_targets}
+\end{equation}
+The resulting targets, measured relative to the initial motor angles, are given in Table~\ref{tab:q32_angles}. We assume a known initial angular reference, no position sensors are used to detect the corners.
+
+\begin{table}[H]
+\centering
+\caption{Motor-angle targets, measured relative to the initial angles}
+\label{tab:q32_angles}
+\begin{tabular}{llll}
+\hline
+Mode & Drawing motion & $\theta_{l,d}-\theta_l(0)$ & $\theta_{r,d}-\theta_r(0)$ \\
+\hline
+$q_1$ & Right & $d/r_m$ & $d/r_m$ \\
+$q_2$ & Up & $2d/r_m$ & $0$ \\
+$q_3$ & Left & $d/r_m$ & $-d/r_m$ \\
+$q_4$ & Down & $0$ & $0$ \\
+\hline
+\end{tabular}
+\end{table}

@@ -61,3 +61,41 @@ def event(t, z):
     return min(t - entered - duration, angle_tol - error)
 
 
+event.terminal = True            # Ends the ODE segment as soon as a corner is reached
+event.direction = 1
+
+# five points are used because the fifth repeats the first to close the square
+x0, y0, side = 0.04, 0.04, 0.04
+corners = [(x0, y0), (x0 + side, y0), (x0 + side, y0 + side),
+           (x0, y0 + side), (x0, y0)]
+
+# start from the first corner, with zero motor speed/current and a heated nozzle
+z = np.array([(x0 + y0)/rm, (x0 - y0)/rm, 0, 0, 0, 0,
+              T_ready, u_hold/Rn, u_hold])
+mode, entered, duration = 0, 0, 1.5
+angle_tol = 0.0005
+switches = []                   #Event times, one for each completed side
+times, xs, ys = [], [], []
+t = 0
+
+while mode < 4:
+    # integrate the current side only until its angle-based guard becomes true
+    sol = solve_ivp(sys, (t, 12), z, events=event)
+
+    #save positions reconstructed from angles, skip the duplicated start point
+    times.extend(sol.t[1:] if times else sol.t)
+    for state in (sol.y.T[1:] if xs else sol.y.T):
+        xs.append(rm*(state[0] + state[1])/2)
+        ys.append(rm*(state[0] - state[1])/2)
+
+    # keep the continuous state at the transition
+    t, z = sol.t[-1], sol.y[:, -1]
+    if sol.status != 1:
+        break                    #integration ended without another corner event
+
+    switches.append(t)
+    mode += 1                    #switch to the next drawing side
+    entered = t                 #reset the elapsed time for the new side
+
+print('Corner times:', ', '.join(f'{te:.2f} s' for te in switches))
+print('Corners completed:', mode)

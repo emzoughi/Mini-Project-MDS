@@ -950,3 +950,52 @@ $q_4$ & Down & $0$ & $0$ \\
 \hline
 \end{tabular}
 \end{table}
+
+
+\paragraph{Motor inputs and hybrid transitions}
+As in Q3.1, each side is described by the fifth-degree polynomial trajectory, with a duration $D=1.5\,\mathrm{s}$ and endpoints given by consecutive corners. The motor voltages are calculated using the inverse dynamics of Q1.4. The discrete modes are
+\[
+Q=\{q_1,q_2,q_3,q_4,q_{\mathrm{done}}\}.
+\]
+The elapsed time since the start of a side is $\tau=t-t_i$, with $\dot\tau=1$. A transition from $q_i$ is enabled when the duration has elapsed and both measured motor angles are sufficiently close to their targets:
+\begin{equation}
+\boxed{G_i:\quad \tau\ge D\ \land\
+\max\bigl(|\theta_l-\theta_{l,d}^{(i)}|,
+|\theta_r-\theta_{r,d}^{(i)}|\bigr)<\varepsilon_\theta.}
+\end{equation}
+We take $\mathrm{Inv}(q_i)=X$. When $G_i$ is satisfied, the next side is selected, or the mode becomes $q_{\mathrm{done}}$ after the fourth side. The physical state is unchanged at the transition:
+\begin{equation}
+\mathbf z^+=\mathbf z^-,\qquad q^+=q_{\mathrm{next}},\qquad \tau^+=0.
+\end{equation}
+
+\paragraph{Numerical simulation and results}
+We reuse the physical parameters of Q3.1. The additional parameters selected for the Q3.2 simulation are summarized in Table~\ref{tab:q32params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameters used for the simulation}
+\label{tab:q32params}
+\begin{tabular}{lll}
+\hline
+Parameter & Symbol & Value \\
+\hline
+Initial position & $(x_0,y_0)$ & $(0.04,0.04)\,\mathrm{m}$ \\
+Square side length & $d$ & $0.04\,\mathrm{m}$ \\
+Movement duration & $D$ & $1.5\,\mathrm{s}$ \\
+Angular tolerance & $\varepsilon_\theta$ & $5\times10^{-4}\,\mathrm{rad}$ \\
+\hline
+\end{tabular}
+\end{table} As in Q3.1, the differential equations are integrated with \texttt{solve\_ivp}. A terminal event detects when the elapsed-time and motor-angle conditions in $G_i$ are satisfied,the solver then restarts in the next drawing mode. The positions shown in the plots are reconstructed from the motor angles using Q1.1.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.43\linewidth]{Q3_2_square.png}\hfill
+\includegraphics[width=0.54\linewidth]{Q3_2_positions.png}
+\caption{Left: desired square and simulated print-head trajectory. Right: positions reconstructed from motor angles, with switching instants marked by dotted lines.}
+\label{fig:q32_results}
+\end{figure}
+
+The four corner detections occur at approximately $1.50$, $3.00$, $4.50$ and $6.00\,\mathrm{s}$. Figure~\ref{fig:q32_results} compares the prescribed and simulated squares (left) and shows the reconstructed coordinates with the switching instants (right).
+
+\end{document}

@@ -99,3 +99,26 @@ while mode < 4:
 
 print('Corner times:', ', '.join(f'{te:.2f} s' for te in switches))
 print('Corners completed:', mode)
+
+#plot 1: compare the square requested and the motion simulated by the motors
+path = np.array(corners)
+plt.figure()
+plt.plot(path[:, 0]*1000, path[:, 1]*1000, '--', label='Desired square')
+plt.plot(np.array(xs)*1000, np.array(ys)*1000, label='Simulated path')
+plt.xlabel('x (mm)')
+plt.ylabel('y (mm)')
+plt.axis('equal')
+plt.legend()
+plt.savefig('Q3_2_square.png')
+
+#plot 2: x and y reconstructed from the two motor angles over time
+plt.figure()
+plt.plot(times, np.array(xs)*1000, label='x')
+plt.plot(times, np.array(ys)*1000, label='y')
+for te in switches:
+    plt.axvline(te, linestyle=':')  #switching instants between square sides
+plt.xlabel('Time (s)')
+plt.ylabel('Position (mm)')
+plt.legend()
+plt.savefig('Q3_2_positions.png')
+plt.show()

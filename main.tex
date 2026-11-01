@@ -63,7 +63,7 @@ Academic Year 2026--2027
 
 \subsection*{Q1.1 -- Kinematics}
 
-The CoreXY mechanism uses two motors to control the position of the print head in the $x$-$y$ plane. We assume that the belts are inextensible, that there is no slipping between the belts and pulleys, and that both driving pulleys have the same radius $r_m$.
+The CoreXY mechanism uses two motors to control the position of the print head. We assume that the belts are inextensible, that there is no slipping between the belts and pulleys, and that both driving pulleys have the same radius $r_m$.
 
 Let $\theta_l$ and $\theta_r$ denote the angular positions of the left and right motors respectively. The linear displacement of a belt driven by a pulley is given by $s=r_m\theta$.
 
@@ -628,53 +628,10 @@ Since both events require the same replacement procedure, the transition from th
 Ours FSM consists of seven states, shown in Figure~\ref{fig:q21fsm}.
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-    >=Stealth,
-    state/.style={
-        draw,
-        rounded corners,
-        align=center,
-        minimum width=2.15cm,
-        minimum height=0.75cm,
-        font=\small
-    },
-    every edge/.style={draw,->}
-]
-
-\node[state] (P) at (0,0) {Printing};
-\node[state] (M) at (3.2,0) {Move to\\$(0,0)$};
-\node[state] (W) at (6.4,0) {Wiping};
-\node[state] (O) at (9.6,0) {Cooling\\(heater off)};
-
-\node[state] (L) at (9.6,-2.8) {Load filament};
-\node[state] (H) at (6.4,-2.8) {Heating\\(heater on)};
-\node[state] (R) at (3.2,-2.8) {Return to\\saved position};
-
-\draw[->] (P) -- node[above,align=center,font=\scriptsize]
-{$C\lor F$\\Stop and save position} (M);
-
-\draw[->] (M) -- node[above,font=\scriptsize]
-{At $(0,0)$} (W);
-
-\draw[->] (W) -- node[above,font=\scriptsize]
-{Wiping complete} (O);
-
-\draw[->] (O) -- node[right,font=\scriptsize]
-{Nozzle cool enough} (L);
-
-\draw[->] (L) -- node[below,font=\scriptsize]
-{Filament loaded} (H);
-
-\draw[->] (H) -- node[below,font=\scriptsize]
-{Nozzle ready} (R);
-
-\draw[->] (R.west) -- node[below left,font=\scriptsize]
-{Position reached} (P.south);
-
-\end{tikzpicture}
-\caption{Finite State Machine for the filament replacement procedure.}
-\label{fig:q21fsm}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Q2.1.jpeg}
+    \caption{Finite State Machin for the filament procedure.}
+    \label{fig:q21fsm}
 \end{figure}
 
 
@@ -709,32 +666,10 @@ state $q_P$ represents the head being parked at $(0,0)$.
 
 
 \begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-  >=Stealth,
-  node distance=2cm,
-  state/.style={draw,circle,minimum size=10mm,inner sep=1pt},
-  every edge/.style={draw,->,thick},
-  lab/.style={font=\scriptsize,fill=white,inner sep=1pt}
-]
-\node[state] (q0) at (0,0) {$q_0$};
-\node[state] (qH) at (3.2,1.8) {$q_H$};
-\node[state] (qV) at (3.2,-1.8) {$q_V$};
-\node[state,double,double distance=1.7pt] (qP) at (6.6,0) {$q_P$};
-\draw[->,thick] (-1.1,0) -- (q0);
-\path
-(q0) edge node[lab,above left] {$(H,0)$} (qH)
-     edge node[lab,below left] {$(V,0)$} (qV)
-(qH) edge node[lab,above right] {$(V,0)$} (qP)
-(qV) edge node[lab,below right] {$(H,0)$} (qP);
-\path
-(q0) edge[loop left] node[lab,left,align=center] {$(H,+)$\\$(V,+)$} (q0)
-(qH) edge[loop above] node[lab,above,align=center] {$(H,+),\ (V,+)$\\$(H,0)$} (qH)
-(qV) edge[loop below] node[lab,below,align=center] {$(H,+),\ (V,+)$\\$(V,0)$} (qV)
-(qP) edge[loop right] node[lab,right] {all inputs} (qP);
-\end{tikzpicture}
-\caption{Deterministic finite automaton for detecting the parked print head.}
-\label{fig:q22automaton}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Q2.2.jpeg}
+    \caption{Deterministic finite automaton for detecting the parked print head.}
+    \label{fig:placeholder}
 \end{figure}
 
 The automaton accepts a sequence once it has observed both $(H,0)$ and
@@ -747,6 +682,8 @@ produces the state sequence
 \begin{equation}
 q_0\to q_0\to q_0\to q_0\to q_H\to q_H\to q_P.
 \end{equation}
+
+
 
 
 \subsection*{Q3.1 -- Filament Replacement}
@@ -951,7 +888,6 @@ $q_4$ & Down & $0$ & $0$ \\
 \end{tabular}
 \end{table}
 
-
 \paragraph{Motor inputs and hybrid transitions}
 As in Q3.1, each side is described by the fifth-degree polynomial trajectory, with a duration $D=1.5\,\mathrm{s}$ and endpoints given by consecutive corners. The motor voltages are calculated using the inverse dynamics of Q1.4. The discrete modes are
 \[
@@ -997,5 +933,6 @@ Angular tolerance & $\varepsilon_\theta$ & $5\times10^{-4}\,\mathrm{rad}$ \\
 \end{figure}
 
 The four corner detections occur at approximately $1.50$, $3.00$, $4.50$ and $6.00\,\mathrm{s}$. Figure~\ref{fig:q32_results} compares the prescribed and simulated squares (left) and shows the reconstructed coordinates with the switching instants (right).
+
 
 \end{document}

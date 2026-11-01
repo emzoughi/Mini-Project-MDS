@@ -89,7 +89,7 @@ def run(shape):
     plt.plot(x_ref*1000, y_ref*1000, '--', label='Desired trajectory')
     plt.xlabel('x (mm)')
     plt.ylabel('y (mm)')
-    plt.axis('equal')           # Same scale on both axes: no distortion.
+    plt.axis('equal')
     plt.legend()
     plt.savefig(f'Q1_4_{shape}.png')
 
